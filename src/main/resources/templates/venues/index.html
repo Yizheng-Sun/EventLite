@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+<title>All venues</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	  <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	  <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
+	  <link rel="stylesheet" href="/webjars/font-awesome/css/all.min.css">
+	  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<style>
+	  body { margin: 0; padding: 0;}
+</style>
+</head>
+<body>
+  <div layout:fragment="content">
+         <div id="header" class="jumbotron text-center" style="color: #4D7298; background-color: #171738;">
+	 <h1 id="title" class="text-center">Venues</h1>
+  	</div>
+	<div class="container">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th style="background-color: #171738; color: white;"><i class="fas fa-bolt"></i> Venue</th>
+          <th style="background-color: #171738; color: white;"><i class="fas fa-street-view"></i> Capacity</th>
+          <th style="background-color: #171738; color: white;"><i class='fas fa-map'></i>Address</th>
+        </tr>
+      </thead>
+      </div>
+      <tbody>
+      <form th:action="@{'/venues/search'}" th:method="get")">
+	        <input type="text" id="search" name="search"}">
+	        <button class="btn btn-outline-info btn-sm" type="submit" style="margin-bottom:5px">Search</button>
+       </form>
+        <tr th:each="v : ${venues}">
+          <td ><a th:text="${v.name}" th:href="@{'/venues/detail/' + ${v.id}}"></a></td>
+          <td th:text="${v.capacity}"></td>
+          <td th:text="${v.roadName} + ', ' + ${v.postcode}"</td>
+        </tr>
+      </tbody>
+    </table>
+	<a class="btn btn-outline-info" role="button" th:href="@{'/venues/add'}" sec:authorize="isAuthenticated()"><i class="fas fa-plus" aria-hidden="true"></i> Add a new venue</a>
+  </div>
+
+</body>
+</html>
