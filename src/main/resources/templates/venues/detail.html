@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>Venue Detail</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js"></script>
+<style>
+	#map { position: absolute; top: 300; width: 65%; height: 50%;}
+	.mapboxgl-popup {
+  		max-width: 200px;
+	}
+
+	.mapboxgl-popup-content {
+  		text-align: center;
+  		font-family: 'Open Sans', sans-serif;
+	}
+</style>
+</head>
+<body>
+
+  <div layout:fragment="content">
+    <h1 th:text="${venue.name}"></h1>
+	<table>
+		<tr>
+			<td th:text="'Capacity: ' + ${venue.capacity}"><i class="fas fa-map-maker-alt"></i></td>
+		</tr>
+		<tr>
+			<td th:text="'Address: ' + ${venue.roadName} + ', ' + ${venue.postcode}"><i class="fas fa-clock"></i></td>
+		</tr>
+
+		<tr>
+			<td th:text="'Upcoming Events:'"></td>
+		</tr>
+		<tr th:each="e : ${venue_events}" th:if="${e.date >= localDate}">
+			<td><a th:text="${e.name}" th:href="@{'/events/detail/' + ${e.id}}"</a></td>
+		</tr>
+
+		<tr>
+			<td th:text="'Past Events:'"></td>
+		</tr>
+		<tr th:each="e : ${venue_events}" th:if="${e.date < localDate}">
+			<td><a th:text="${e.name}" th:href="@{'/events/detail/' + ${e.id}}"</a></td>
+		</tr>
+	</table>
+	  <form th:action="@{'/venues/'+${venue.id}}" th:method="delete" sec:authorize="isAuthenticated()">
+		  <button type="submit">Delete Venue</button>
+	  </form>
+
+	  <div class="alert alert-danger" th:if="${error}">
+		  <p th:text="${error}"></p>
+	  </div>
+	  
+	  <form th:action="@{/venues/update/}+${venue.id}" th:method="get" sec:authorize="isAuthenticated()">
+              <button type="submit">Update Venue</button>
+      </form>
+	  
+	<div id="map"></div>
+ 	
+	<script>
+		const coor1 = [[${coor1}]];
+		const coor2 = [[${coor2}]];
+		const name =  "[[${venue_name}]]";
+		mapboxgl.accessToken = 'pk.eyJ1IjoieWl6aGVuZ3N1biIsImEiOiJjbDI3cno4YjAwMmRuM2pwMXVpOHI5cnQ3In0.srVWFMNvkD24RfzYg0gzsw';
+		
+		const geojson = {
+		  type: 'FeatureCollection',
+		  features: [
+		    {
+		      type: 'Feature',
+		      geometry: {
+		        type: 'Point',
+		        coordinates: [coor1, coor2]
+		      },
+		      properties: {
+		        title: 'Venue Name',
+		        description: name
+		      }
+		    }]
+		};
+		
+		const map = new mapboxgl.Map({
+		container: 'map',
+		style: 'mapbox://styles/mapbox/streets-v11',
+		center: [coor1, coor2],
+		zoom: 12
+		});
+		 
+		for (const feature of geojson.features) {
+			// create a HTML element for each feature
+			const el = document.createElement('div');
+			el.className = 'marker';
+			 
+			// make a marker for each feature and add it to the map
+			new mapboxgl.Marker()
+			.setLngLat(feature.geometry.coordinates)
+			.setPopup(
+				new mapboxgl.Popup({ offset: 25 }) // add popups
+				.setHTML(
+				`<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
+				)
+			)
+			.addTo(map);
+		}
+		 
+	</script>
+  </div>
+
+</body>
+</html>

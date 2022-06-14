@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>Event Detail</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js"></script>
+<style>
+	#map { position: absolute; top: 300; width: 65%; height: 50%;}
+	.mapboxgl-popup {
+  		max-width: 200px;
+	}
+
+	.mapboxgl-popup-content {
+  		text-align: center;
+  		font-family: 'Open Sans', sans-serif;
+	}
+</style>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1 th:text="${event.name}"></h1>
+	<table>
+		<tr>
+			<td th:text="'Venue: ' + ${event.venue.name}"><i class="fas fa-map-maker-alt"></i></td>
+		</tr>
+		<tr>
+			<td th:text="'Date: ' + ${event.date}"><i class="fas fa-clock"></i></td>
+		</tr>
+		<tr>
+			<td th:text="'Time: ' + ${event.time}"><i class="fas fa-calender"></i></td>
+		</tr>
+		<tr>
+			<td th:text="'Description: ' + ${event.description}"><i class="fas fa-calender"></i></td>
+		</tr>
+	</table>
+    	<form th:action="@{/events/}+${event.id}" th:method="delete" sec:authorize="isAuthenticated()">
+              <button type="submit">Delete Event</button>
+        </form>
+        <form th:action="@{/events/update/}+${event.id}" th:method="get" sec:authorize="isAuthenticated()">
+              <button type="submit">Update Event</button>
+        </form>
+    
+    <div class="alert" th:if="${success}">
+		<p th:text="${success}"></p>
+	</div>
+	<div class="alert" th:if="${empty_tweet}">
+		<p th:text="${empty_tweet}"></p>
+	</div>
+	
+    <form th:action="@{'/events/share/'+${event.id}}" th:method="post">
+    	<input th:placeholder="${event.name}" id="share_twitter" type = "text" name="share_twitter">
+    	<button class="btn btn-primary" type="submit"><i class="fas fa-bookmark" aria-hidden="true"></i> share</button>
+    </form>
+    
+    
+    <div id="map"></div>
+ 	
+	<script>
+		const coor1 = [[${coor1}]];
+		const coor2 = [[${coor2}]];
+		const name = "[[${name}]]";
+		const date = "[[${date}]]";
+		const time = "[[${time}]]";
+		console.log(coor1,coor2);
+		mapboxgl.accessToken = 'pk.eyJ1IjoieWl6aGVuZ3N1biIsImEiOiJjbDI3cno4YjAwMmRuM2pwMXVpOHI5cnQ3In0.srVWFMNvkD24RfzYg0gzsw';
+		
+		const geojson = {
+		  type: 'FeatureCollection',
+		  features: [
+		    {
+		      type: 'Feature',
+		      geometry: {
+		        type: 'Point',
+		        coordinates: [coor1, coor2]
+		      },
+		      properties: {
+		        title: 'Event:',
+		        description1: name,
+		        description2: date,
+		        description3: time
+		      }
+		    }]
+		};
+		
+		const map = new mapboxgl.Map({
+		container: 'map',
+		style: 'mapbox://styles/mapbox/streets-v11',
+		center: [coor1, coor2],
+		zoom: 12
+		});
+		 
+		for (const feature of geojson.features) {
+			// create a HTML element for each feature
+			const el = document.createElement('div');
+			el.className = 'marker';
+			 
+			// make a marker for each feature and add it to the map
+			new mapboxgl.Marker()
+			.setLngLat(feature.geometry.coordinates)
+			.setPopup(
+				new mapboxgl.Popup({ offset: 25 }) // add popups
+				.setHTML(
+				`<p>Event: ${feature.properties.description1}</p>
+				<p>Date: ${feature.properties.description2}</p>
+				<p>Time: ${feature.properties.description3}</p>`
+				)
+			)
+			.addTo(map);
+		}
+		 
+	</script>
+  </div>
+
+</body>
+</html>

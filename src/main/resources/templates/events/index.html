@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+  <title>All events</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/webjars/font-awesome/css/all.min.css">
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+	<link href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css" rel="stylesheet">
+	<script src="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js"></script>
+	<style>
+		body { margin: 0; padding: 0;}
+		#map { position: absolute; top: 300; width: 65%; height: 50%;}
+	</style>
+</head>
+<body>
+  <div layout:fragment="content">
+     <div id="header" class="jumbotron text-center" style="color: #4D7298; background-color: #171738;">
+	 <h1 id="title" class="text-center">Events</h1>
+  	</div>
+	<div class="container">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th style="background-color: #171738; color: white;"><i class="fas fa-bolt"></i> Event</th>
+          <th style="background-color: #171738; color: white;"><i class="fas fa-map-marker-alt"></i> Venue</th>
+          <th style="background-color: #171738; color: white;"><i class="fas fa-calendar"></i> Date</th>
+          <th style="background-color: #171738; color: white;"><i class="fas fa-clock"></i> Time</th>
+        </tr>
+      </thead>
+      <tbody>
+       <form th:action="@{'/events/search'}" th:method="get")">
+	        <input type="text" id="search" name="search"}">
+	        <button class="btn btn-outline-info btn-sm" type="submit" style="margin-bottom:5px">Search</button>
+       </form>
+        <td>Upcoming events:</td>
+        <tr th:each="e : ${events}" th:if="${e.date > localDate}">
+          <td><a th:text="${e.name}" th:href="@{'/events/detail/' + ${e.id}}"</a></td>
+          <td><a th:text="${e.venue.name}" th:href="@{'/venues/detail/' + ${e.venue.id}}"></a></td>
+          <td th:text="${{e.date}}">Event date</td>
+          <td th:text="${{e.time}}">Event time</td>
+          <td>
+          	<form th:action="@{'/events/update/'+${e.id}}" sec:authorize="isAuthenticated()">
+              <button type="submit">Update</button>
+            </form>
+          </td>
+        </tr>
+        
+        
+        <td>Previous events:</td>
+        <tr th:each="e : ${events}" th:if="${e.date <= localDate}">
+          <td><a th:text="${e.name}" th:href="@{'/events/detail/' + ${e.id}}"</a></td>
+          <td><a th:text="${e.venue.name}" th:href="@{'/venues/detail/' + ${e.venue.id}}"></a></td>
+          <td th:text="${{e.date}}">Event date</td>
+          <td th:text="${{e.time}}">Event time</td>
+          <td>
+          	<form th:action="@{'/events/update/'+${e.id}}" sec:authorize="isAuthenticated()">
+              <button type="submit">Update</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <table style="border: 1px solid; border-color: #007bff; margin-bottom: 25px;">
+    	<tr><td>Twitter Feed<td></tr>
+    	<tr th:each="i : ${timeline}">
+        	<td><a th:text="${i.getCreatedAt()}+'--  '+${i.getText()}" th:href="'https://twitter.com/Eventlite22_F13/status/'+${i.getId()}"></a></td>
+        </tr>	
+    </table>
+    
+    
+    <a style="margin-bottom:25px" class="btn btn-primary" role="button" th:href="@{'/events/add'}" sec:authorize="isAuthenticated()"><i class="fas fa-plus" aria-hidden="true"></i> Add a new event</a>
+ 	<div id="map"></div>
+ 	</div>
+ 	<script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
+	<script>
+		mapboxgl.accessToken = 'pk.eyJ1IjoieWl6aGVuZ3N1biIsImEiOiJjbDI3cno4YjAwMmRuM2pwMXVpOHI5cnQ3In0.srVWFMNvkD24RfzYg0gzsw';;;
+		const mapboxClient = mapboxSdk({ accessToken: mapboxgl.accessToken });
+		var Lat = [[${EventsLat}]]
+		
+		var Lon = [[${EventsLon}]]
+		
+		var names = "[[${nextEventNames}]]"
+		var all_names = names.split(",");
+		
+		var dates = "[[${nextEventDates}]]"
+		var all_dates = dates.split(",");
+		
+		var times = "[[${nextEventTimes}]]"
+		var all_times = times.split(",");
+		
+		var count = 0;
+		
+		const map = new mapboxgl.Map({
+			container: 'map',
+			style: 'mapbox://styles/mapbox/streets-v11',
+			center: [Lon[0], Lat[0]],
+			zoom: 13
+		});
+		 
+
+		Lat.forEach(e=>{
+			// Create a default Marker and add it to the map.
+			const marker1 = new mapboxgl.Marker()
+			.setLngLat([Lon[count], Lat[count]]).setPopup(
+				new mapboxgl.Popup({ offset: 25 }) // add popups
+				.setHTML(
+				`<p>Name: ${all_names[count].replace("[",'')}</p>
+				 <p>Time: ${all_times[count].replace("[",'')}</p>
+				 <p>Date: ${all_dates[count].replace("[",'')}</p>`
+				)
+			)
+			.addTo(map);
+			count +=1;
+		});
+	</script>
+  </div>
+</body>
+</html>

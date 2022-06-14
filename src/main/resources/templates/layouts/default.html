@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <title layout:title-pattern="$LAYOUT_TITLE: $CONTENT_TITLE">EventLite</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/webjars/font-awesome/css/all.min.css" />
+</head>
+<body>
+<div>
+  <nav class="navbar navbar-default navbar-fixed-top">
+  <a class="btn" style="background-color:white; font-size:30px; color:#171738;" role="button" th:href="@{'/'}">EventLite</a>
+    <div sec:authorize="!isAuthenticated()">
+      <i class="fas fa-user-slash" aria-hidden="true"></i> Not signed in
+      <a class="btn btn-outline-info" role="button" th:href="@{/sign-in}">
+        <i class="fas fa-sign-in-alt" aria-hidden="true"></i> Sign in
+      </a>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+      <form th:action="@{/sign-out}" method="post">
+        <i class="fas fa-user" aria-hidden="true"></i> Signed in as <span sec:authentication="name"></span>
+        <button type="submit" class="btn btn-outline-info"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Sign out</button>
+      </form>
+    </div>
+    </nav>
+
+    <div layout:fragment="content">
+      Main page body goes here...
+    </div>
+  </div>
+
+  <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/webjars/popper.js/umd/popper.min.js"></script>
+  <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

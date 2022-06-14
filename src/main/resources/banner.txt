@@ -1,0 +1,12 @@
+ ${AnsiColor.BRIGHT_RED}  ____ ___  __  __ ____   ${AnsiColor.BRIGHT_YELLOW} ____ ${AnsiColor.BRIGHT_GREEN} _____${AnsiColor.BRIGHT_BLUE} _  _  ${AnsiColor.BRIGHT_CYAN} _ ${AnsiColor.BRIGHT_MAGENTA}____  
+ ${AnsiColor.BRIGHT_RED} / ___/ _ \|  \/  |  _ \  ${AnsiColor.BRIGHT_YELLOW}|___ \${AnsiColor.BRIGHT_GREEN}|___ /${AnsiColor.BRIGHT_BLUE}| || | ${AnsiColor.BRIGHT_CYAN}/ |${AnsiColor.BRIGHT_MAGENTA}___ \ 
+ ${AnsiColor.BRIGHT_RED}| |  | | | | |\/| | |_) | ${AnsiColor.BRIGHT_YELLOW}  __) |${AnsiColor.BRIGHT_GREEN} |_ \${AnsiColor.BRIGHT_BLUE}| || |_${AnsiColor.BRIGHT_CYAN}| |${AnsiColor.BRIGHT_MAGENTA} __) |
+ ${AnsiColor.BRIGHT_RED}| |__| |_| | |  | |  __/  ${AnsiColor.BRIGHT_YELLOW} / __/${AnsiColor.BRIGHT_GREEN} ___) ${AnsiColor.BRIGHT_BLUE}|__   _${AnsiColor.BRIGHT_CYAN}| |${AnsiColor.BRIGHT_MAGENTA}/ __/ 
+ ${AnsiColor.BRIGHT_RED} \____\___/|_|  |_|_|     ${AnsiColor.BRIGHT_YELLOW}|_____${AnsiColor.BRIGHT_GREEN}|____/${AnsiColor.BRIGHT_BLUE}   |_| ${AnsiColor.BRIGHT_CYAN}|_|${AnsiColor.BRIGHT_MAGENTA}_____|
+ ${AnsiColor.BRIGHT_WHITE} _____                 _  ${AnsiColor.BRIGHT_BLACK} _     _ _          ${AnsiColor.WHITE}______  
+ ${AnsiColor.BRIGHT_WHITE}| ____|_   _____ _ __ | |_${AnsiColor.BRIGHT_BLACK}| |   (_) |_ ___    ${AnsiColor.WHITE}\ \ \ \ 
+ ${AnsiColor.BRIGHT_WHITE}|  _| \ \ / / _ \ '_ \| __${AnsiColor.BRIGHT_BLACK}| |   | | __/ _ \   ${AnsiColor.WHITE} \ \ \ \
+ ${AnsiColor.BRIGHT_WHITE}| |___ \ V /  __/ | | | |_${AnsiColor.BRIGHT_BLACK}| |___| | ||  __/   ${AnsiColor.WHITE} / / / /
+ ${AnsiColor.BRIGHT_WHITE}|_____| \_/ \___|_| |_|\__${AnsiColor.BRIGHT_BLACK}|_____|_|\__\___|   ${AnsiColor.WHITE}/_/_/_/ 
+ ${AnsiStyle.NORMAL}
+     ${AnsiColor.BRIGHT_RED}...:: ${AnsiColor.WHITE}2022 ${AnsiColor.BRIGHT_YELLOW}::${AnsiColor.BRIGHT_GREEN}::${AnsiColor.BRIGHT_BLUE}::${AnsiColor.BRIGHT_CYAN}::${AnsiColor.BRIGHT_MAGENTA}:: ${AnsiColor.WHITE}Spring Boot ${spring-boot.version} ${AnsiColor.BRIGHT_RED}::...${AnsiStyle.NORMAL}

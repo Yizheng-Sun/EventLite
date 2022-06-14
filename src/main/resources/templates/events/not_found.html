@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/default}">
+<head>
+  <title>Event Not Found</title>
+</head>
+<body>
+  <div layout:fragment="content">
+    <h1>Event not found</h1>
+    
+    <p>
+      Sorry, event <span th:text="${not_found_id}">0</span> was not found.
+    </p>
+    
+    <p>
+      <a class="btn btn-primary" role="button" th:href="@{/events}"><i class="fas fa-arrow-left" aria-hidden="true"></i> Events list</a>
+    </p>
+  </div>
+</body>
+</html>
